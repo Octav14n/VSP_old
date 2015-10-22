@@ -13,7 +13,8 @@ import java.util.ArrayList;
 @RestController
 public class Jail {
     private ArrayList<Player> inmates = new ArrayList<>();
-    @RequestMapping(value = "/jail/add/{player}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/jail", method = RequestMethod.POST)
     public void addInmate(Player player) {
         inmates.add(player);
     }
