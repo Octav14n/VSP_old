@@ -1,4 +1,4 @@
-package restopoly.player;
+package restopoly.dataaccesslayer.entities;
 
 /**
  * Created by octavian on 13.10.15.

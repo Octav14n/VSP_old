@@ -1,4 +1,4 @@
-package restopoly.dice;
+package restopoly.dataaccesslayer.entities;
 
 /**
  * Created by octavian on 13.10.15.

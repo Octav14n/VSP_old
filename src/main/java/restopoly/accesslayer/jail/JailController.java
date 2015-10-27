@@ -1,9 +1,10 @@
-package restopoly.jail;
+package restopoly.accesslayer.jail;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import restopoly.player.Player;
+import restopoly.dataaccesslayer.entities.Jail;
+import restopoly.dataaccesslayer.entities.Player;
 
 import java.util.ArrayList;
 
@@ -11,16 +12,16 @@ import java.util.ArrayList;
  * Created by octavian on 13.10.15.
  */
 @RestController
-public class Jail {
-    private ArrayList<Player> inmates = new ArrayList<>();
+public class JailController {
+    private Jail jail = new Jail();
 
     @RequestMapping(value = "/jail", method = RequestMethod.POST)
     public void addInmate(Player player) {
-        inmates.add(player);
+        jail.addInmate(player);
     }
 
     @RequestMapping(value = "/jail", method = RequestMethod.GET)
     public ArrayList<Player> showInmates() {
-        return inmates;
+        return jail.showInmates();
     }
 }
