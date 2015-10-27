@@ -17,4 +17,8 @@ Die IP-Addresse herausfinden:
 ``docker inspect vsp | grep IPAddress``
 
 
-Aus dem letzten Step die IP-Addresse aufrufen per "http://<ip>:8080/"
+Aus dem letzten Step die IP-Addresse aufrufen per "http://<ip>:4567/"
+
+# Zeitmanagement
+Praktikum 1: 4h
+Praktikum 2: 2½h (27. Okt)

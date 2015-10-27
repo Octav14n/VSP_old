@@ -1,14 +1,56 @@
 package restopoly.accesslayer.games;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import restopoly.accesslayer.exceptions.GameNotFoundException;
+import restopoly.accesslayer.exceptions.PlayerNotFoundException;
+import restopoly.accesslayer.player.PlayerController;
+import restopoly.dataaccesslayer.entities.Game;
+import restopoly.dataaccesslayer.entities.GameList;
+import restopoly.dataaccesslayer.entities.Player;
+import restopoly.dataaccesslayer.entities.PlayerList;
 
-@RestController(value = "/games")
+import java.util.List;
+
+@RestController()
 public class GamesController {
+    private GameList gameList = new GameList();
+    @Autowired
+    private PlayerController playerController;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public void getGames() {
+    @RequestMapping(value = "/games", method = RequestMethod.GET)
+    public List<Game> getGames() {
+        return gameList.getGames();
+    }
 
+    @RequestMapping(value = "/games", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    public Game createGame() {
+        return gameList.addGame();
+    }
+
+    @RequestMapping(value = "/games/{gameid}/players/{playerid}", method = RequestMethod.PUT)
+    public void joinGame(@PathVariable int gameid, @PathVariable String playerid) {
+        Game game = gameList.getGame(gameid);
+        if (game == null)
+            throw new GameNotFoundException();
+        Player player = playerController.getPlayer(playerid);
+        if (player == null)
+            throw new PlayerNotFoundException();
+
+        game.addPlayer(player);
+    }
+
+    @RequestMapping(value = "/games/{gameid}/players/{playerid}/ready", method = RequestMethod.PUT)
+    public void setReady(@PathVariable int gameid, @PathVariable String playerid) {
+        Game game = gameList.getGame(gameid);
+        if (game == null)
+            throw new GameNotFoundException();
+        Player player = playerController.getPlayer(playerid);
+        if (player == null)
+            throw new PlayerNotFoundException();
+
+        game.setReady(player, true);
     }
 }
