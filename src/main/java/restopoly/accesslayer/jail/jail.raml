@@ -32,3 +32,19 @@ version: 0.1
                 }
               }
             example: '[{"name": "Patrick"}, {"name": "Kossakowski"}]'
+/jail/{playerId}/dice/{rollN1}/{rollN2}:
+  delete:
+    description: Removes the given player from jail if he rolled a doublet.
+    responses:
+      200:
+        description: The player was successfully removed from jail.
+      409:
+        description: The roll was not a doublet. The player remains in jail.
+/jail/{playerId}/card:
+  delete:
+    description: Removes the given player from jail if he uses his "Free of jail" card.
+    responses:
+      200:
+        description: The player was successfully removed from jail.
+      409:
+        description: The card is not owned by the player. The player remains in jail.

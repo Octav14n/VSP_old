@@ -51,14 +51,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <finalName>vsp_abq340</finalName>
+                    <finalName>VSP_abq340</finalName>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
