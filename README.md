@@ -21,4 +21,4 @@ Aus dem letzten Step die IP-Addresse aufrufen per "http://<ip>:4567/"
 
 # Zeitmanagement
 Praktikum 1: 4h
-Praktikum 2: 2½h (27. Okt)
+Praktikum 2: 2½h (27. Okt) 1h (04. Nov)
