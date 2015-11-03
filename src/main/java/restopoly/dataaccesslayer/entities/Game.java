@@ -1,11 +1,15 @@
 package restopoly.dataaccesslayer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by octavian on 27.10.15.
  */
+@JsonIgnoreProperties("currentPlayer")
 public class Game {
     private int gameid;
     private List<GamePlayer> gamePlayers;
@@ -38,5 +42,27 @@ public class Game {
                 return;
             }
         }
+    }
+
+    public boolean getReady(Player player) {
+        boolean isReady = false;
+        for (GamePlayer gamePlayer : gamePlayers) {
+            if (gamePlayer.getPlayer().equals(player)) {
+                if (gamePlayer.isReady() == true) {
+                    isReady = true;
+                }
+            }
+        }
+        return isReady;
+    }
+
+    // TODO check ready
+    public Player getCurrentPlayer() {
+        if (gamePlayers.isEmpty()) {
+            return null;
+        }
+        GamePlayer gamePlayer = gamePlayers.get(0);
+        Player currentPlayer = gamePlayer.getPlayer();
+        return currentPlayer;
     }
 }

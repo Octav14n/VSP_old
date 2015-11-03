@@ -53,4 +53,31 @@ public class GamesController {
 
         game.setReady(player, true);
     }
+
+    @RequestMapping(value = "/games/{gameid}/players/{playerid}/ready", method = RequestMethod.GET)
+    public boolean getReady(@PathVariable int gameid, @PathVariable String playerid) {
+        Game game = gameList.getGame(gameid);
+        if (game == null)
+            throw new GameNotFoundException();
+        Player player = playerController.getPlayer(playerid);
+        if (player == null)
+            throw new PlayerNotFoundException();
+
+        return game.getReady(player);
+    }
+
+    @RequestMapping(value = "/games/{gameid}/players/current")
+    @ResponseStatus(HttpStatus.OK)
+    public Player getCurrentPlayer(@PathVariable int gameid) {
+        Game game = gameList.getGame(gameid);
+        if(game == null) {
+            throw new GameNotFoundException();
+        }
+        Player currentPlayer = game.getCurrentPlayer();
+        if (currentPlayer == null) {
+            throw new PlayerNotFoundException();
+        }
+
+        return currentPlayer;
+    }
 }
