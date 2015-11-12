@@ -1,5 +1,7 @@
 # VSP
 
+[![Build Status Master](https://travis-ci.org/Octav14n/VSP.svg?branch=master)](https://travis-ci.org/Octav14n/VSP)
+
 ## Wie führe ich das Programm in Docker aus
 Den Container erstellen per:
 ``docker build -t vsp1 .``
@@ -21,4 +23,4 @@ Aus dem letzten Step die IP-Addresse aufrufen per "http://<ip>:4567/"
 
 # Zeitmanagement
 Praktikum 1: 4h
-Praktikum 2: 2½h (27. Okt) 1h (04. Nov)
+Praktikum 2: 2½h (27. Okt) 1h (04. Nov) 1½h (11.11.2015)
