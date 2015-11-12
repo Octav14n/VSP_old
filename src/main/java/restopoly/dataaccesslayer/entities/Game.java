@@ -56,10 +56,15 @@ public class Game {
         return isReady;
     }
 
-    // TODO check ready
     public Player getCurrentPlayer() {
         if (gamePlayers.isEmpty()) {
             return null;
+        }
+        // Check that all players are ready.
+        for (GamePlayer gamePlayer : gamePlayers) {
+            if (!gamePlayer.isReady()) {
+                return null;
+            }
         }
         GamePlayer gamePlayer = gamePlayers.get(0);
         Player currentPlayer = gamePlayer.getPlayer();
