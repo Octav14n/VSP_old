@@ -3,6 +3,7 @@ package restopoly;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,11 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import restopoly.dataaccesslayer.entities.Place;
 import restopoly.dataaccesslayer.entities.Player;
 
-import java.util.Collections;
-import java.util.List;
-
 import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.*;
 
 /**
  * Created by octavian on 11.11.15.
@@ -31,7 +28,8 @@ public class GamesControllerTest {
     @Value("${local.server.port}")   // 6
     int port;
 
-    @org.junit.Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         RestAssured.port = port;
     }
 
