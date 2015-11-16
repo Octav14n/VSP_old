@@ -7,6 +7,8 @@ public class GamePlayer {
     private Player player;
     private Game game;
     private boolean ready;
+    // every gameplayer has exactly one bankAccount.
+    private BankAccount bankAccount;
 
     public GamePlayer(Player player, Game game) {
         this.player = player;
@@ -28,5 +30,13 @@ public class GamePlayer {
 
     public boolean isReady() {
         return ready;
+    }
+
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
     }
 }
