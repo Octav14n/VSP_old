@@ -33,6 +33,7 @@ public class GamesControllerTest {
     @Before
     public void setUp() throws Exception {
         RestAssured.port = port;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
     @Test
@@ -56,10 +57,6 @@ public class GamesControllerTest {
             .body("", Matchers.hasSize(0));
 
         Player player = new Player("simon", "Simon der Grune", new Place("Wonderland"));
-        Bank bank = new Bank(488, "Bank der goldenen Kobolde", 1337);
-        BankAccount bankAccount = new BankAccount(1, "Simon", "ABC-123-XYZ", "ABC-123456789");
-        bankAccount.setBankBalance(500d);
-        bank.setBankAccounts(bankAccount);
 
         // POST Players --> Player Object. // Creates a Player.
         given().when()
@@ -141,29 +138,5 @@ public class GamesControllerTest {
             .body("id", Matchers.equalTo(player.getId()))
             .body("name", Matchers.equalTo(player.getName()))
             .body("place.name", Matchers.equalTo(player.getPlace().getName()));
-
-        // POST --> Creates a bank for one specific game.
-        // TODO: Also implement one or more tests, which will check, that more than one player has a banking account.
-        given().when()
-                .contentType(ContentType.URLENC)
-                .param("bankId", 488)
-                .param("name", "Bank der goldenen Kobolde")
-                .param("bankCode", 1337)
-                .post("/games/0/banks").then()
-                .statusCode(HttpStatus.CREATED.value())
-                .body("bankId", Matchers.equalTo(bank.getBankId()))
-                .body("name", Matchers.equalTo(bank.getName()))
-                .body("bankCode", Matchers.equalTo(bank.getBankCode()));
-
-        // GET --> GET one player with a banking account for one game.
-        given().when()
-                .get("/games/0/banks").then()
-                .statusCode(HttpStatus.OK.value())
-                .body("bankId", Matchers.equalTo(bank.getBankId()))
-                .body("name", Matchers.equalTo(bank.getName()))
-                .body("bankCode", Matchers.equalTo(bank.getBankCode()));
-
-        // POST --> POST money to another players banking account.
-        // TODO: The other tests for our banking service.
     }
 }

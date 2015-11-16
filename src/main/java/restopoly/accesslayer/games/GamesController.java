@@ -81,26 +81,26 @@ public class GamesController {
         return currentPlayer;
     }
 
-    /**
-     * Create the one and only bank for a single game.
-     *
-     * @param gameid    for the game with this ID there will be created the bank.
-     * @param bankId    this is the bank identifier for this game.
-     * @param name      this is the name of the bank which is created for a game.
-     * @param bankCode  the bankCode is a special code which is set to every bank.
-     */
-    @RequestMapping(value = "/games/{gameid}/banks", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public Bank createGameBank(@PathVariable int gameid, int bankId, String name, int bankCode) {
-        Game game = gameList.getGame(gameid);
-            if (game.getGameid() == gameid) {
-                if (bank == null) {
-                    bank = new Bank(bankId, name, bankCode);
-                    game.setBank(bank);
-                }
-            }
-        return game.getBank();
-    }
+//    /**
+//     * Create the one and only bank for a single game.
+//     *
+//     * @param gameid    for the game with this ID there will be created the bank.
+//     * @param bankId    this is the bank identifier for this game.
+//     * @param name      this is the name of the bank which is created for a game.
+//     * @param bankCode  the bankCode is a special code which is set to every bank.
+//     */
+//    @RequestMapping(value = "/games/{gameid}/banks", method = RequestMethod.POST)
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Bank createGameBank(@PathVariable int gameid, int bankId, String name, int bankCode) {
+//        Game game = gameList.getGame(gameid);
+//            if (game.getGameid() == gameid) {
+//                if (bank == null) {
+//                    bank = new Bank(bankId, name, bankCode);
+//                    game.setBank(bank);
+//                }
+//            }
+//        return game.getBank();
+//    }
 
     /**
      * Get the bank for a selected game with the gameid of that game.

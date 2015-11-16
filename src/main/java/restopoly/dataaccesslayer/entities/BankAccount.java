@@ -1,49 +1,56 @@
 package restopoly.dataaccesslayer.entities;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Paddy-Gaming on 14.11.2015.
  */
 public class BankAccount {
 
-    private int bankAccountId;
-    private String bankOwner;
-    private String IBAN;
-    private String BIC;
-    // Kontostand
-    private double bankBalance;
+    private @NotNull GamePlayer player;
+    private int saldo;
 
-    public BankAccount(int bankAccountId, String bankOwner, String IBAN, String BIC) {
-        this.bankAccountId = bankAccountId;
-        this.bankOwner = bankOwner;
-        this.IBAN = IBAN;
-        this.BIC = BIC;
+    public BankAccount(GamePlayer player, int saldo) {
+        this.player = player;
+        this.saldo = saldo;
     }
 
-    public int getBankAccountId() {
-        return bankAccountId;
+    // Needed for Spring.
+    private BankAccount() {}
+
+    public GamePlayer getPlayer() {
+        return player;
     }
 
-    public String getBankOwner() {
-        return bankOwner;
+    public int getSaldo() {
+        return saldo;
     }
 
-    public String getIBAN() {
-        return IBAN;
+    public void setSaldo(int saldo) {
+        this.saldo = saldo;
     }
 
-    public String getBIC() {
-        return BIC;
+    public void addSaldo(int saldo) {
+        this.saldo += saldo;
     }
 
-    public double getBankBalance() {
-        return bankBalance;
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        BankAccount that = (BankAccount) o;
+
+        if (saldo != that.saldo)
+            return false;
+        return !(player != null ? !player.equals(that.player) : that.player != null);
+
     }
 
-    /**
-     *
-     * @param bankBalance
-     */
-    public void setBankBalance(double bankBalance) {
-        this.bankBalance = bankBalance;
+    @Override public int hashCode() {
+        int result = player != null ? player.hashCode() : 0;
+        result = 31 * result + saldo;
+        return result;
     }
 }

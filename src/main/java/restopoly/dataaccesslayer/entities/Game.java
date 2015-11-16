@@ -2,7 +2,9 @@ package restopoly.dataaccesslayer.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,9 @@ import java.util.List;
 @JsonIgnoreProperties("currentPlayer")
 public class Game {
     private int gameid;
-    private List<GamePlayer> gamePlayers;
+    private @NotEmpty @NotNull List<GamePlayer> gamePlayers;
     // every game has only one bank.
-    private Bank bank;
+    private @NotNull Bank bank;
 
     public Game(int gameid) {
         this.gameid = gameid;
@@ -34,7 +36,7 @@ public class Game {
     }
 
     public void addPlayer(Player player) {
-        gamePlayers.add(new GamePlayer(player, this));
+        gamePlayers.add(new GamePlayer(player, this.getGameid()));
     }
 
     public void setReady(Player player, boolean ready) {

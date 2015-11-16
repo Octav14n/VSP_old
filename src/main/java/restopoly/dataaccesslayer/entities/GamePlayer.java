@@ -1,20 +1,23 @@
 package restopoly.dataaccesslayer.entities;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * GamePlayer is a helper entity for game to save additional data for every Player.
  */
 public class GamePlayer {
-    private Player player;
-    private Game game;
+    private @NotNull Player player;
+    private int gameId;
     private boolean ready;
-    // every gameplayer has exactly one bankAccount.
-    private BankAccount bankAccount;
 
-    public GamePlayer(Player player, Game game) {
+    public GamePlayer(Player player, int gameId) {
         this.player = player;
-        this.game = game;
+        this.gameId = gameId;
         this.ready = false;
     }
+
+    // Needed by Spring.
+    private GamePlayer() {}
 
     public void setReady(boolean ready) {
         this.ready = ready;
@@ -24,19 +27,11 @@ public class GamePlayer {
         return player;
     }
 
-    public Game getGame() {
-        return game;
+    public int getGameId() {
+        return gameId;
     }
 
     public boolean isReady() {
         return ready;
-    }
-
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
     }
 }
