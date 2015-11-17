@@ -1,6 +1,5 @@
 package restopoly.dataaccesslayer.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -14,13 +13,13 @@ import java.util.List;
 @JsonIgnoreProperties("currentPlayer")
 public class Game {
     private int gameid;
-    private @NotEmpty @NotNull List<GamePlayer> gamePlayers;
+    private @NotEmpty @NotNull List<Player> players;
     // every game has only one bank.
     private @NotNull Bank bank;
 
     public Game(int gameid) {
         this.gameid = gameid;
-        gamePlayers = new ArrayList<>();
+        players = new ArrayList<>();
     }
 
     public int getGameid() {
@@ -29,20 +28,20 @@ public class Game {
 
     public List<Player> getPlayers() {
         List<Player> players = new ArrayList<>();
-        for (GamePlayer gamePlayer : gamePlayers) {
-            players.add(gamePlayer.getPlayer());
+        for (Player player : this.players) {
+            players.add(player);
         }
         return players;
     }
 
     public void addPlayer(Player player) {
-        gamePlayers.add(new GamePlayer(player, this.getGameid()));
+        players.add(player);
     }
 
     public void setReady(Player player, boolean ready) {
-        for (GamePlayer gamePlayer : gamePlayers) {
-            if (gamePlayer.getPlayer().equals(player)) {
-                gamePlayer.setReady(ready);
+        for (Player gamePlayer : players) {
+            if (gamePlayer.equals(gamePlayer)) {
+                gamePlayer.setIsReady(ready);
                 return;
             }
         }
@@ -50,8 +49,8 @@ public class Game {
 
     public boolean getReady(Player player) {
         boolean isReady = false;
-        for (GamePlayer gamePlayer : gamePlayers) {
-            if (gamePlayer.getPlayer().equals(player)) {
+        for (Player gamePlayer : players) {
+            if (gamePlayer.equals(player)) {
                 if (gamePlayer.isReady() == true) {
                     isReady = true;
                 }
@@ -61,17 +60,16 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
-        if (gamePlayers.isEmpty()) {
+        if (players.isEmpty()) {
             return null;
         }
         // Check that all players are ready.
-        for (GamePlayer gamePlayer : gamePlayers) {
+        for (Player gamePlayer : players) {
             if (!gamePlayer.isReady()) {
                 return null;
             }
         }
-        GamePlayer gamePlayer = gamePlayers.get(0);
-        Player currentPlayer = gamePlayer.getPlayer();
+        Player currentPlayer = players.get(0);
         return currentPlayer;
     }
 

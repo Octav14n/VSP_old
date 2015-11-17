@@ -41,8 +41,8 @@ public class BanksControllerTest {
         Player playerSimon = new Player("simon", "Simon der Grune", new Place("Wonderland"));
         Player playerPatrick = new Player("patrick", "Patrick der Linke", new Place("Hyrule"));
         Game game = new Game(0);
-        BankAccount bankAccountSimon = new BankAccount(new GamePlayer(playerSimon, game.getGameid()), 0);
-        BankAccount bankAccountPatrick = new BankAccount(new GamePlayer(playerPatrick, game.getGameid()), 42);
+        BankAccount bankAccountSimon = new BankAccount(playerSimon, 0);
+        BankAccount bankAccountPatrick = new BankAccount(playerPatrick,  42);
 
         // POST --> Creates a bank account for one specific game / user combo.
         given()
@@ -55,7 +55,7 @@ public class BanksControllerTest {
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("player[0].id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(bankAccountSimon.getSaldo()));
 
         // POST --> Can't create the same account twice.
@@ -75,7 +75,7 @@ public class BanksControllerTest {
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("player[0].id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(2000));
 
         // POST --> Add money (2000) to my bank account (from the bank).
@@ -88,7 +88,7 @@ public class BanksControllerTest {
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("player[0].id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(1000));
 
         // POST --> Add money (2000) to my bank account (from the bank).
@@ -115,14 +115,14 @@ public class BanksControllerTest {
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("player[0].id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(900));
 
         // GET --> GET one player with a banking account for one game.
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[1].player.id", Matchers.equalTo(playerPatrick.getId()))
+            .body("player[1].id", Matchers.equalTo(playerPatrick.getId()))
             .body("saldo[1]", Matchers.equalTo(142));
 
         // POST --> POST money to another players banking account.
@@ -138,14 +138,14 @@ public class BanksControllerTest {
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("player[0].id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(900));
 
         // GET --> GET one player with a banking account for one game.
         given().when()
             .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[1].player.id", Matchers.equalTo(playerPatrick.getId()))
+            .body("player[1].id", Matchers.equalTo(playerPatrick.getId()))
             .body("saldo[1]", Matchers.equalTo(142));
 
     }
