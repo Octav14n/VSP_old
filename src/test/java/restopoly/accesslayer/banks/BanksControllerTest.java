@@ -38,64 +38,115 @@ public class BanksControllerTest {
     @Test
     public void testAll() {
 
-        Player player = new Player("simon", "Simon der Grune", new Place("Wonderland"));
+        Player playerSimon = new Player("simon", "Simon der Grune", new Place("Wonderland"));
+        Player playerPatrick = new Player("patrick", "Patrick der Linke", new Place("Hyrule"));
         Game game = new Game(0);
-        BankAccount bankAccount = new BankAccount(new GamePlayer(player, game.getGameid()), 0);
+        BankAccount bankAccountSimon = new BankAccount(new GamePlayer(playerSimon, game.getGameid()), 0);
+        BankAccount bankAccountPatrick = new BankAccount(new GamePlayer(playerPatrick, game.getGameid()), 42);
 
         // POST --> Creates a bank account for one specific game / user combo.
         given()
             .contentType(ContentType.JSON)
-            .body(bankAccount)
+            .body(bankAccountSimon)
             .when().post("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.CREATED.value());
 
         // GET --> GET one player with a banking account for one game.
         given().when()
-            .get("/banks/0/players").then()
+            .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(player.getId()))
-            .body("saldo[0]", Matchers.equalTo(bankAccount.getSaldo()));
+            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("saldo[0]", Matchers.equalTo(bankAccountSimon.getSaldo()));
 
         // POST --> Can't create the same account twice.
         given()
             .contentType(ContentType.JSON)
-            .body(bankAccount)
+            .body(bankAccountSimon)
             .when().post("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.CONFLICT.value());
 
         // POST --> Add money (2000) to my bank account (from the bank).
         given()
             .body("Schweigen der Loge der Maurer.")
-            .post("/banks/" + game.getGameid() + "/transfer/to/" + player.getId() + "/2000").then()
+            .post("/banks/" + game.getGameid() + "/transfer/to/" + playerSimon.getId() + "/2000").then()
             .statusCode(HttpStatus.CREATED.value());
 
         // GET --> GET one player with a banking account for one game.
         given().when()
-            .get("/banks/0/players").then()
+            .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(player.getId()))
+            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(2000));
 
         // POST --> Add money (2000) to my bank account (from the bank).
         given()
             .body("Schmiergelder, vermoegenswirksame Leistungen.")
-            .post("/banks/" + game.getGameid() + "/transfer/from/" + player.getId() + "/1000").then()
+            .post("/banks/" + game.getGameid() + "/transfer/from/" + playerSimon.getId() + "/1000").then()
             .statusCode(HttpStatus.CREATED.value());
 
         // GET --> GET one player with a banking account for one game.
         given().when()
-            .get("/banks/0/players").then()
+            .get("/banks/" + game.getGameid() + "/players").then()
             .statusCode(HttpStatus.OK.value())
-            .body("player[0].player.id", Matchers.equalTo(player.getId()))
+            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
             .body("saldo[0]", Matchers.equalTo(1000));
 
         // POST --> Add money (2000) to my bank account (from the bank).
         given()
             .body("Ich kauf mir die Welt.")
-            .post("/banks/" + game.getGameid() + "/transfer/from/" + player.getId() + "/2000").then()
+            .post("/banks/" + game.getGameid() + "/transfer/from/" + playerSimon.getId() + "/2000").then()
             .statusCode(HttpStatus.FORBIDDEN.value());
 
+
+        // POST --> Creates a bank account for one specific game / user combo.
+        given()
+            .contentType(ContentType.JSON)
+            .body(bankAccountPatrick)
+            .when().post("/banks/" + game.getGameid() + "/players").then()
+            .statusCode(HttpStatus.CREATED.value());
+
         // POST --> POST money to another players banking account.
-        // TODO: The other tests for our banking service.
+        given()
+            .body("Hier armer Schlucker.")
+            .post("/banks/" + game.getGameid() + "/transfer/from/" + playerSimon.getId() + "/to/" + playerPatrick.getId() + "/100").then()
+            .statusCode(HttpStatus.CREATED.value());
+
+        // GET --> GET one player with a banking account for one game.
+        given().when()
+            .get("/banks/" + game.getGameid() + "/players").then()
+            .statusCode(HttpStatus.OK.value())
+            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("saldo[0]", Matchers.equalTo(900));
+
+        // GET --> GET one player with a banking account for one game.
+        given().when()
+            .get("/banks/" + game.getGameid() + "/players").then()
+            .statusCode(HttpStatus.OK.value())
+            .body("player[1].player.id", Matchers.equalTo(playerPatrick.getId()))
+            .body("saldo[1]", Matchers.equalTo(142));
+
+        // POST --> POST money to another players banking account.
+        // This should run into an Exception and the sados should be as they were before transaction.
+        System.out.println("\nThe next RuntimeException is thrown to test transactions! Don't respect it.\n");
+        given()
+            .body("Supercalifragilisticexpialigetisch")
+            .post("/banks/" + game.getGameid() + "/transfer/from/" + playerPatrick.getId() + "/to/" + playerSimon.getId() + "/100").then()
+            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        // Now check both accounts if the saldo equals the saldo before the transaction.
+        // GET --> GET one player with a banking account for one game.
+        given().when()
+            .get("/banks/" + game.getGameid() + "/players").then()
+            .statusCode(HttpStatus.OK.value())
+            .body("player[0].player.id", Matchers.equalTo(playerSimon.getId()))
+            .body("saldo[0]", Matchers.equalTo(900));
+
+        // GET --> GET one player with a banking account for one game.
+        given().when()
+            .get("/banks/" + game.getGameid() + "/players").then()
+            .statusCode(HttpStatus.OK.value())
+            .body("player[1].player.id", Matchers.equalTo(playerPatrick.getId()))
+            .body("saldo[1]", Matchers.equalTo(142));
+
     }
 }
